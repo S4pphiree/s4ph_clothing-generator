@@ -1,0 +1,103 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+form {
+    max-width: 700px;
+    margin: auto;
+    padding: 1em;
+    border: 1px solid #ccc;
+    border-radius: 1em;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+div {
+    margin-bottom: 1em;
+}
+label {
+    margin-bottom: .5em;
+    color: #333333;
+    display: block;
+}
+select, input, textarea {
+    width: 100%;
+    padding: .5em;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: .25em;
+    box-sizing: border-box;
+}
+button {
+    padding: 0.7em;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 0.25em;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.hidden {
+    display: none;
+}
+.color-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5em;
+}
+.color-item input[type="text"] {
+    flex: 1;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.container input, button {
+    margin : 10px;
+}
+
+.container label {
+    margin-right: 10px;
+}
+
+.torso-type-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5em;
+}
+
+.torso-type-item input[type="text"] {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.remove-item-btn {
+    background-color: white;
+    color: #fff;
+    border: none;
+    border-radius: 0.25em;
+    cursor: pointer;
+    padding: 0.3em 0.5em;
+}
+
+#json-part {
+    margin: auto;
+    padding: 1em;
+    border: 1px solid #ccc;
+    border-radius: 1em;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+#jsonOutput {
+    font-family: monospace; /* Utilizza un font monospace per mantenere l'allineamento corretto */
+    white-space: pre; /* Mantiene la formattazione del testo esattamente come è */
+    padding: 10px;
+    background-color: #f0f0f0; /* Sfondo grigio chiaro */
+    border: 1px solid #ccc; /* Bordo sottile grigio */
+    border-radius: 5px; /* Bordo arrotondato */
+    overflow: auto; /* Aggiunge una barra di scorrimento se il contenuto è troppo grande */
+}
+

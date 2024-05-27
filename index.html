@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Dinamico con JSON</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js"></script>
+</head>
+<body>
+<form id="dynamicForm">
+    <div id="genderContainer" class="container">
+        <label for="gender">Genere</label>
+        <select id="gender" name="gender">
+            <option value="male">Maschio</option>
+            <option value="female">Femmina</option>
+        </select>
+    </div>
+    
+    <div id="itemLabelContainer" class="container">
+        <label for="itemLabel">Nome</label>
+        <input type="text" id="itemLabel" name="itemLabel">
+        <button type="button" onclick="generateName()">Genera Nome</button>
+    </div>
+    
+    <div id="itemNameContainer" class="container">
+        <label for="itemInfoName">Nome Oggetto</label>
+        <input type="text" id="itemInfoName" name="itemInfoName" disabled>
+        <input type="text" id="itemName" name="itemName">
+    </div>
+
+    <div id = "colorContainer">
+        <label for="colorVariantsContainer">Colori</label>
+        <div id="colorVariantsContainer">
+            <!-- I colori selezionati verranno mostrati qui -->
+        </div>
+        <button type="button" onclick="addColor()">Aggiungi Colore</button>
+    </div>
+
+    <div id="itemsContainer">
+        <label for="itemSelect">Seleziona un oggetto:</label>
+        <select id="itemSelect" name="itemSelect" onchange="toggleForm()">
+            <option value="hats">Cappelli</option>
+            <option value="glasses">Occhiali</option>
+            <option value="earrings">Orecchini</option>
+            <option value="watches">Orologi</option>
+            <option value="bracelets">Braccialetti</option>
+            <option value="masks">Maschere</option>
+            <option value="hands">Guanti</option>
+            <option value="accessories">Accessori</option>
+            <option value="tops">Parti Superiori</option>
+            <option value="pants">Pantaloni</option>
+            <option value="bags">Borse</option>
+            <option value="shoes">Scarpe</option>
+            <option value="armors">Giubbotti Antiproiettili</option>
+        </select>
+    </div>
+
+    <div id = "formsContainer">
+        <div id="handsForm" class="hidden">
+            <label for="torsoTypesContainer">Tipi di Torso</label>
+            <div id="torsoTypesContainer">
+                <!-- I torsotypes selezionati verranno mostrati qui -->
+            </div>
+            <button type="button" onclick="addTorsoType()">Aggiungi Petto</button>
+        </div>
+    </div>
+
+    <div id = "jsonPart">
+        <div id = "jsonButtons" class = "container">
+            <button type="button" onclick="generateJSON()">Genera JSON</button>
+            <button type="button" id="copyButton" onclick="copyJSON()">Copia JSON</button>
+        </div>
+
+        <div id="jsonOutput">
+            <!-- Il JSON generato verrà mostrato qui -->
+        </div>     
+    </div>
+</form>
+
+
+
+
+
+</body>
+</html>
