@@ -136,8 +136,3 @@ function createNumberInput(parent, name) {
     objectArrayChildInput.style.width = '60px';
     parent.appendChild(objectArrayChildInput);
 }
-
-
-
-
-
