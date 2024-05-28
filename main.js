@@ -1,5 +1,4 @@
 var generatedName = "";
-var colorCounter = 0;
 
 function toggleForm() {
     const select = document.getElementById('itemSelect');
@@ -173,3 +172,8 @@ function CreateNumberedObject(container, name) {
     variantItem.appendChild(removeBtn);
     variantsContainer.appendChild(variantItem);
 }
+
+function ClearForm() {
+    document.querySelectorAll('[id$="-item"]').forEach(e => e.remove());
+}
+

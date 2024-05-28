@@ -65,9 +65,9 @@ button {
     margin-right: 10px;
 }
 
-.remove-item-btn {
+.remove-item-btn, .clear-btn {
     background-color: white;
-    color: #fff;
+    color: red;
     border: none;
     border-radius: 0.25em;
     cursor: pointer;
