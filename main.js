@@ -22,6 +22,16 @@ function toggleVariant() {
     variantContainer.classList.toggle('hidden', select.value !== 'true');
 }
 
+function ClearForm() {
+    document.querySelectorAll('[id$="-item"]').forEach(e => e.remove());
+
+    document.getElementById('itemSelect').value = 'hats';
+
+    document.getElementById('jsonOutput').innerText = '';
+    
+    toggleForm();
+}
+
 function copyJSON() {
     const jsonOutput = document.getElementById('jsonOutput');
     const range = document.createRange();
@@ -114,56 +124,6 @@ function generateName() {
 
     return generatedName + label;
 }
-
-/*function GetNumberedObject(name) {
-    const arrayItems = document.querySelectorAll('#' + name + '-item input[type="text"]');
-    let items = {};
-    arrayItems.forEach((numberInput, index) => {
-        if (numberInput.value.trim() !== '') {
-            items[`[${index}]`] = "'" + numberInput.value.trim() + "'";
-        }
-    });
-
-    return items;
-}
-
-function GetTextBoxObject(name, childName) {
-    const arrayItems = document.querySelectorAll('#' + name + '-item input[type="text"]');
-    let items = {};
-    
-    arrayItems.forEach((array) => {
-        if (array.value.trim() !== '') {
-            const arrayItem = array.value.trim();
-            const arrayNumberInput = array.nextElementSibling; // Ottieni l'input del numero del modello
-            const arrayModel = parseInt(arrayNumberInput.value); // Converti il valore in un numero intero
-            
-            items[`['${arrayItem}']`] = {
-                [childName]: arrayModel
-            };
-        }
-    });
-
-    return items;
-}
-
-function GetSelectBoxObject(name, childName) {
-    const selectBoxItems = document.querySelectorAll('#' + name + '-item select');
-    let selectBox = {};
-    
-    selectBoxItems.forEach((select) => {
-        if (select.value.trim() !== '') {
-            const selectItem = select.value.trim();
-            const selectNumberInput = select.nextElementSibling; // Ottieni l'input del numero del modello
-            const selectModel = parseInt(selectNumberInput.value); // Converti il valore in un numero intero
-            
-            selectBox[`['${selectItem}']`] = {
-                [childName]: selectModel
-            };
-        }
-    });
-
-    return selectBox;
-}*/
 
 function GetObjectInfo(type, name, childName) {
     let array = {};
@@ -343,15 +303,6 @@ function CreateObjectArray(container, name, type, options) {
     objectContainer.appendChild(objectArrayItem);
 }
 
-function ClearForm() {
-    document.querySelectorAll('[id$="-item"]').forEach(e => e.remove());
-
-    document.getElementById('itemSelect').value = 'hats';
-
-    document.getElementById('jsonOutput').innerText = '';
-    
-    toggleForm();
-}
 
 
 
