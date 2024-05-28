@@ -1,39 +1,54 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     margin: 20px;
+    background-color: #f9f9f9;
 }
+
 form {
     max-width: 700px;
     margin: auto;
-    padding: 1em;
-    border: 1px solid #ccc;
+    padding: 2em;
+    border: 1px solid #ddd;
     border-radius: 1em;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
 }
+
 div {
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
 }
+
 label {
-    margin-bottom: .5em;
-    color: #333333;
+    margin-bottom: 0.5em;
+    color: #333;
     display: block;
+    font-weight: bold;
 }
+
 select, input, textarea {
     width: 100%;
-    padding: .5em;
+    padding: 0.5em;
     font-size: 1em;
     border: 1px solid #ccc;
-    border-radius: .25em;
+    border-radius: 0.25em;
     box-sizing: border-box;
+    margin-bottom: 1em;
 }
+
 button {
-    padding: 0.7em;
+    padding: 0.5em 1em;
     color: #fff;
     background-color: #007bff;
     border: none;
     border-radius: 0.25em;
     cursor: pointer;
     font-size: 1em;
+    transition: background-color 0.3s;
+    margin: 0.5em; /* Uniform margin for buttons */
+}
+
+button:hover {
+    background-color: #0056b3;
 }
 
 .hidden {
@@ -43,11 +58,11 @@ button {
 .container {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 1.5em;
 }
 
 .container input, button {
-    margin : 10px;
+    margin: 10px 0;
 }
 
 .container label {
@@ -68,10 +83,17 @@ button {
 .remove-item-btn, .clear-btn {
     background-color: white;
     color: red;
-    border: none;
+    border: 1px solid red;
     border-radius: 0.25em;
     cursor: pointer;
     padding: 0.3em 0.5em;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 0.5em; /* Uniform margin for buttons */
+}
+
+.remove-item-btn:hover, .clear-btn:hover {
+    background-color: red;
+    color: white;
 }
 
 #json-part {
@@ -79,16 +101,21 @@ button {
     padding: 1em;
     border: 1px solid #ccc;
     border-radius: 1em;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
 }
 
 #jsonOutput {
-    font-family: monospace; /* Utilizza un font monospace per mantenere l'allineamento corretto */
-    white-space: pre; /* Mantiene la formattazione del testo esattamente come è */
+    font-family: monospace;
+    white-space: pre;
     padding: 10px;
-    background-color: #f0f0f0; /* Sfondo grigio chiaro */
-    border: 1px solid #ccc; /* Bordo sottile grigio */
-    border-radius: 5px; /* Bordo arrotondato */
-    overflow: auto; /* Aggiunge una barra di scorrimento se il contenuto è troppo grande */
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: auto;
+    margin-top: 1em;
 }
 
+.add-btn {
+    margin: 0.5em; /* Added margin for add-btn class */
+}

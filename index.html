@@ -8,115 +8,149 @@
     <script src="main.js"></script>
 </head>
 <body>
-<form id="dynamicForm">
-    <div id="genderContainer" class="container">
-        <label for="gender">Genere</label>
-        <select id="gender" name="gender">
-            <option value="male">Maschio</option>
-            <option value="female">Femmina</option>
-        </select>
-    </div>
-    
-    <div id="itemLabelContainer" class="container">
-        <label for="itemLabel">Nome</label>
-        <input type="text" id="itemLabel" name="itemLabel">
-        <button type="button" onclick="generateName()">Genera Nome</button>
-    </div>
-    
-    <div id="itemNameContainer" class="container">
-        <label for="itemInfoName">Nome Oggetto</label>
-        <input type="text" id="itemInfoName" name="itemInfoName" disabled>
-        <input type="text" id="itemName" name="itemName">
-    </div>
-
-    <div id = "colorContainer">
-        <label for="colorVariantsContainer">Colori</label>
-        <div id="colorVariantsContainer">
-            <!-- I colori selezionati verranno mostrati qui -->
-        </div>
-        <button type="button" onclick="CreateNumberedObject('colorVariantsContainer', 'colours')">Aggiungi Colore</button>
-    </div>
-
-    <div id="itemsContainer">
-        <label for="itemSelect">Seleziona tipo di oggetto:</label>
-        <select id="itemSelect" name="itemSelect" onchange="toggleForm()">
-            <option value="hats">Cappelli</option>
-            <option value="glasses">Occhiali</option>
-            <option value="earrings">Orecchini</option>
-            <option value="watches">Orologi</option>
-            <option value="bracelets">Braccialetti</option>
-            <option value="masks">Maschere</option>
-            <option value="hands">Guanti</option>
-            <option value="accessories">Accessori</option>
-            <option value="tops">Parti Superiori</option>
-            <option value="pants">Pantaloni</option>
-            <option value="bags">Borse</option>
-            <option value="shoes">Scarpe</option>
-            <option value="armors">Giubbotti Antiproiettili</option>
-        </select>
-    </div>
-
-    <div id = "formsContainer">
-        <div id="standardForm">
+    <form id="dynamicForm">
+        <div id="genderContainer" class="container">
+            <label for="gender">Genere</label>
+            <select id="gender" name="gender">
+                <option value="male">Maschio</option>
+                <option value="female">Femmina</option>
+            </select>
         </div>
         
-        <div id="handsForm" class="hidden">
-            <label for="torsoTypesContainer">Tipi di Torso</label>
-            <div id="torsoTypesContainer">
-                <!-- I torsotypes selezionati verranno mostrati qui -->
+        <div id="itemLabelContainer" class="container">
+            <label for="itemLabel">Nome</label>
+            <input type="text" id="itemLabel" name="itemLabel" value="Placeholder Item">
+            <button type="button" class="add-btn" onclick="generateName()">Genera Nome</button>
+        </div>
+        
+        <div id="itemNameContainer" class="container">
+            <label for="itemInfoName">Nome Oggetto</label>
+            <input type="text" id="itemInfoName" name="itemInfoName" disabled>
+            <input type="text" id="itemName" name="itemName">
+        </div>
+
+        <div id="itemModelContainer" class="container">
+            <label for="itemModel">ID Modello</label>
+            <input type="number" id="itemModel" name="itemModel" value="0">
+        </div>
+
+        <div id="colorContainer" class="container">
+            <label for="colorVariantsContainer">Colori</label>
+            <button type="button" class="add-btn" onclick="CreateNumberedObject('colorVariantsContainer', 'colours')">+</button>
+            <div id="colorVariantsContainer"></div>
+        </div>
+
+        <div id="itemsContainer" class="container">
+            <label for="itemSelect">Tipo di Oggetto</label>
+            <select id="itemSelect" name="itemSelect" onchange="toggleForm()">
+                <option value="hats">Cappelli</option>
+                <option value="glasses">Occhiali</option>
+                <option value="earrings">Orecchini</option>
+                <option value="watches">Orologi</option>
+                <option value="bracelets">Braccialetti</option>
+                <option value="masks">Maschere</option>
+                <option value="hands">Guanti</option>
+                <option value="accessories">Accessori</option>
+                <option value="tops">Parti Superiori</option>
+                <option value="pants">Pantaloni</option>
+                <option value="bags">Borse</option>
+                <option value="shoes">Scarpe</option>
+                <option value="armors">Giubbotti Antiproiettili</option>
+            </select>
+        </div>
+
+        <div id="formsContainer">
+            <div id="standardForm"></div>
+            
+            <div id="handsForm" class="hidden">
+                <div id="formContainer" class="container">
+                    <label for="torsoTypesContainer">Tipi di Torso</label>
+                    <button type="button" class="add-btn" onclick="CreateSelectBoxObject('torsoTypesContainer', 'torsoTypes', torsoTypeOptions)">+</button>
+                    <div id="torsoTypesContainer"></div>
+                </div>
+                <script>
+                    const torsoTypeOptions = {
+                        'Mezze Braccia': 'halfarms',
+                        'Mani e Mezzo Collo': 'handsonlyhalfneck',
+                        'Braccia Complete': 'fullarms',
+                        'Nessuno': 'none',
+                        'Solo Mani': 'handsonly',
+                        'Braccia Complete fino al Torso': 'fullarmstoptorso',
+                        'Solo Mani e Collo Intero': 'handsonlyfullneck',
+                        'Avambracci': 'forearms',
+                        'Avambracci e Collo': 'forearmsbitneck',
+                        'Mani e Collo': 'handsbitneck',
+                        'Torso e Mani': 'torsohandsonly',
+                        'Corpo Intero': 'fullbody'
+                    };
+                </script>
             </div>
-            <script>
-                const torsoTypeOptions = {
-                    'Mezze Braccia': 'halfarms',
-                    'Mani e Mezzo Collo': 'handsonlyhalfneck',
-                    'Braccia Complete': 'fullarms',
-                    'Nessuno': 'none',
-                    'Solo Mani': 'handsonly',
-                    'Braccia Complete fino al Torso': 'fullarmstoptorso',
-                    'Solo Mani e Collo Inter': 'handsonlyfullneck',
-                    'Avambracci': 'forearms',
-                    'Avambracci e Collo': 'forearmsbitneck',
-                    'Mani e Collo': 'handsbitneck',
-                    'Torso e Mani': 'torsohandsonly',
-                    'Corpo Intero': 'fullbody'
-                };
-            </script>
-            <button type="button" onclick="CreateSelectBoxObject('torsoTypesContainer', 'torsoTypes', torsoTypeOptions )">Aggiungi Petto</button>
-        </div>
-
-        <div id="accessoriesForm" class="hidden">
-            <label for="lengthsContainer">Lunghezze Accessorio</label>
-            <div id="lengthsContainer">
-                <!-- I torsotypes selezionati verranno mostrati qui -->
+            
+            <div id="accessoriesForm" class="hidden">
+                <div id="formContainer" class="container">
+                    <label for="lengthsContainer">Lunghezze Accessorio</label>
+                    <button type="button" class="add-btn" onclick="CreateSelectBoxObject('lengthsContainer', 'accessoryTypes', lengthsOptions)">+</button>
+                    <div id="lengthsContainer"></div>
+                </div>
+                <script>
+                    const lengthsOptions = {
+                        'Lunghezza 1': 'length1',
+                        'Lunghezza 2': 'length2',
+                        'Lunghezza 3': 'length3'
+                    };
+                </script>
             </div>
-            <script>
-                const lengthsOptions = {
-                    'Lunghezza 1': 'length1',
-                    'Lunghezza 2': 'length2',
-                    'Lunghezza 3': 'length3'
-                };
-            </script>
-            <button type="button" onclick="CreateSelectBoxObject('lengthsContainer', 'accessoryTypes', lengthsOptions)">Aggiungi Lunghezza</button>
+
+            <div id="topsForm" class="hidden">
+                <div id="formContainer">
+                    <label for="undershirtWhitelistContainer">Whitelist Undershirt</label>
+                    <button type="button" class="add-btn" onclick="CreateTextBoxObject('undershirtWhitelistContainer', 'undershirtWhitelist')">+</button>
+                    <div id="undershirtWhitelistContainer"></div>
+
+                    <label for="undershirtBoolSelect">Può essere un'undershirt?</label>
+                    <select id="undershirtBoolSelect" name="undershirtBoolSelect">
+                        <option value="false">No - false</option>
+                        <option value="true">Sì - true</option>
+                    </select>
+
+                    <label for="accessoryLengthSelect">Lunghezza accettata degli accessori</label>
+                    <select id="accessoryLengthSelect" name="accessoryLengthSelect">
+                        <option value="length1">Lunghezza 1 - length1</option>
+                        <option value="length2">Lunghezza 2 - length2</option>
+                        <option value="length3">Lunghezza 3 - length3</option>
+                    </select>
+
+                    <label for="variantBoolSelect">Ha una variante?</label>
+                    <select id="variantBoolSelect" name="variantBoolSelect" onchange="toggleVariant()">
+                        <option value="false">No - false</option>
+                        <option value="true">Sì - true</option>
+                    </select>
+
+                    <div id="variantContainer" class="hidden">
+                        <label for="variantModelText">ID Modello Variante</label>
+                        <input type="text" placeholder="ID Modello Variante" id="variantModelText" name="variantModelText">
+                        
+                        <label for="variantAccessoryLengthSelect">Lunghezza accettata degli accessori</label>
+                        <select id="variantAccessoryLengthSelect" name="variantAccessoryLengthSelect">
+                            <option value="length1">Lunghezza 1 - length1</option>
+                            <option value="length2">Lunghezza 2 - length2</option>
+                            <option value="length3">Lunghezza 3 - length3</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div id = "jsonPart">
-        <div id = "jsonButtons" class = "container">
-            <button type="button" onclick="generateJSON()">Genera JSON</button>
-            <button type="button" id="copyButton" onclick="copyJSON()">Copia JSON</button>
+        <div id="jsonPart">
+            <div id="jsonButtons" class="container">
+                <button type="button" class="add-btn" onclick="generateJSON()">Genera JSON</button>
+                <button type="button" id="copyButton" class="add-btn" onclick="copyJSON()">Copia JSON</button>
+            </div>
+
+            <div id="jsonOutput"></div>
+            
+            <button type="reset" class="clear-btn" onclick="ClearForm()">Svuota</button>
         </div>
-
-        <div id="jsonOutput">
-            <!-- Il JSON generato verrà mostrato qui -->
-        </div>     
-
-        <button type="reset" class="clear-btn" onclick="ClearForm()">Svuota</button>
-    </div>
-</form>
-
-
-
-
-
+    </form>
 </body>
 </html>

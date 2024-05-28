@@ -5,9 +5,22 @@ function toggleForm() {
 
     const handsForm = document.getElementById('handsForm');
     const accessoriesForm = document.getElementById('accessoriesForm');
+    const topsForm = document.getElementById('topsForm');
     
     handsForm.classList.toggle('hidden', select.value !== 'hands');
     accessoriesForm.classList.toggle('hidden', select.value !== 'accessories');
+    topsForm.classList.toggle('hidden', select.value !== 'tops');
+
+    // Aggiungi eventuali altri form qui
+}
+
+function toggleVariant() {
+    const select = document.getElementById('variantBoolSelect');
+
+    const variantContainer = document.getElementById('variantContainer');
+    
+    variantContainer.classList.toggle('hidden', select.value !== 'true');
+
     // Aggiungi eventuali altri form qui
 }
 
@@ -32,6 +45,7 @@ function copyJSON() {
 
 function generateJSON() {
     const item = document.getElementById('itemSelect').value;
+    const model = document.getElementById('itemModel').value;
     const label = document.getElementById('itemLabel').value;
 
     let jsonOutput = {};
@@ -39,15 +53,31 @@ function generateJSON() {
     
     jsonOutput[outputName] = {
         label: label,
+        model: model,
         colours: GetNumberedObject('colours'),
     };
 
     switch(item) {
         case 'hands': {
-            jsonOutput[outputName].torsoTypes = GetSelectBoxObject('torsoTypes');
+            jsonOutput[outputName].torsoTypes = GetSelectBoxObject('torsoTypes', 'model');
+            break;
         }
         case 'accessories': {
-            jsonOutput[outputName].accessoryTypes = GetSelectBoxObject('accessoryTypes');
+            jsonOutput[outputName].accessoryTypes = GetSelectBoxObject('accessoryTypes', 'model');
+            break;
+        }
+        case 'tops': {
+            jsonOutput[outputName].canBeUndershirt = document.getElementById('undershirtBoolSelect').value;
+            jsonOutput[outputName].undershirtWhitelist = GetTextBoxObject('undershirtWhitelist', 'torsotype')
+
+            jsonOutput[outputName].accessoryLengthWhitelist = document.getElementById('accessoryLengthSelect').value;
+            jsonOutput[outputName].hasVariant = document.getElementById('variantBoolSelect').value;
+            if (jsonOutput[outputName].hasVariant == true)
+                {
+                    jsonOutput[outputName].variantModel = document.getElementById('variantModelText').value;
+                    jsonOutput[outputName].variantAccessoryLengthWhitelist = document.getElementById('variantAccessoryLengthSelect').value;
+                }
+            break;
         }
     }
 
@@ -81,7 +111,26 @@ function GetNumberedObject(name) {
     return items;
 }
 
-function GetSelectBoxObject(name) {
+function GetTextBoxObject(name, childName) {
+    const arrayItems = document.querySelectorAll('#' + name + '-item input[type="text"]');
+    let items = {};
+    
+    arrayItems.forEach((array) => {
+        if (array.value.trim() !== '') {
+            const arrayItem = array.value.trim();
+            const arrayNumberInput = array.nextElementSibling; // Ottieni l'input del numero del modello
+            const arrayModel = parseInt(arrayNumberInput.value); // Converti il valore in un numero intero
+            
+            items[`['${arrayItem}']`] = {
+                [childName]: arrayModel
+            };
+        }
+    });
+
+    return items;
+}
+
+function GetSelectBoxObject(name, childName) {
     const selectBoxItems = document.querySelectorAll('#' + name + '-item select');
     let selectBox = {};
     
@@ -92,7 +141,7 @@ function GetSelectBoxObject(name) {
             const selectModel = parseInt(selectNumberInput.value); // Converti il valore in un numero intero
             
             selectBox[`['${selectItem}']`] = {
-                model: selectModel
+                [childName]: selectModel
             };
         }
     });
@@ -122,11 +171,12 @@ function CreateSelectBoxObject(container, name, options) {
     const selectBoxInput = document.createElement('input');
     selectBoxInput.type = 'number';
     selectBoxInput.value = 0;
+    selectBoxInput.title = `ID Modello`;
     selectBoxInput.style.width = '60px';
 
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
-    removeBtn.textContent = '❌';
+    removeBtn.textContent = '×';
     removeBtn.classList.add('remove-item-btn');
     removeBtn.onclick = function() {
         selectBoxContainer.removeChild(selectBoxItem);
@@ -143,14 +193,12 @@ function CreateNumberedObject(container, name) {
 
     const variantItem = document.createElement('div');
     variantItem.classList.add('item');
-    variantItem.setAttribute('id', 'colours-item');
-
-    //const colorLabel = document.createElement('label');
-    //colorLabel.textContent = 'Colore:';
+    variantItem.setAttribute('id', name +'-item');
 
     const numberInput = document.createElement('input');
     numberInput.type = 'text';
     numberInput.placeholder = 'Inserisci ' + name;
+    numberInput.title = `ID ${name}`;
     numberInput.required = true;
 
     const variantNumberInput = document.createElement('input');
@@ -161,7 +209,7 @@ function CreateNumberedObject(container, name) {
 
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
-    removeBtn.textContent = '❌';
+    removeBtn.textContent = '×';
     removeBtn.classList.add('remove-item-btn');
     removeBtn.onclick = function() {
         variantsContainer.removeChild(variantItem);
@@ -173,7 +221,48 @@ function CreateNumberedObject(container, name) {
     variantsContainer.appendChild(variantItem);
 }
 
+function CreateTextBoxObject(container, name) {
+    const variantsContainer = document.getElementById(container);
+
+    const variantItem = document.createElement('div');
+    variantItem.classList.add('item');
+    variantItem.setAttribute('id', name +'-item');
+
+    const textInput = document.createElement('input');
+    textInput.type = 'text';
+    textInput.value = `${document.getElementById('gender').value}_${document.getElementById('itemSelect').value}_`;
+    textInput.title = "Nome Item";
+    textInput.required = true;
+
+    const childInput = document.createElement('input');
+    childInput.type = 'number';
+    childInput.min = 0;
+    childInput.value = 0;
+    childInput.title = "ID Tipo di Torso"
+    childInput.style.width = '60px';
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.textContent = '×';
+    removeBtn.classList.add('remove-item-btn');
+    removeBtn.onclick = function() {
+        variantsContainer.removeChild(variantItem);
+    };
+
+    
+    variantItem.appendChild(textInput);
+    variantItem.appendChild(childInput);
+    variantItem.appendChild(removeBtn);
+    variantsContainer.appendChild(variantItem);
+}
+
 function ClearForm() {
     document.querySelectorAll('[id$="-item"]').forEach(e => e.remove());
+
+    document.getElementById('itemSelect').value = 'hats';
+
+    document.getElementById('jsonOutput').innerText = '';
+    
+    toggleForm();
 }
 
