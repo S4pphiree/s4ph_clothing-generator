@@ -51,7 +51,10 @@ function generateJSON() {
     }
 
     var jsonResult = JSON.stringify(jsonOutput, null, 4);
-    jsonResult = jsonResult.replace(/:/g, " =")
+    jsonResult = jsonResult.replace(/:/g, " =");
+    jsonResult = jsonResult.substring(6, jsonResult.length-1)
+    jsonResult = jsonResult.replace( /^\s.*/, '   ' );
+
     document.getElementById('jsonOutput').innerText = jsonResult.replace(/"/g, ""); // Rimuovi i doppi apici
     document.getElementById('copyButton').style.backgroundColor = '#007bff';
 }

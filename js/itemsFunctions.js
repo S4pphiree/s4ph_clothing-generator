@@ -44,7 +44,7 @@ function GetObjectInfo(type, name, childName) {
                     break;
                 case 'number':
                     key = `[${inputNumberParsedValue}]`;
-                    value = inputValue;
+                    value = `'${inputValue}'`;
                     break;
                 case 'textSelect':
                     var selectValue = item.querySelector('select').value.trim();
