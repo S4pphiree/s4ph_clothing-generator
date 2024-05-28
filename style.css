@@ -39,15 +39,6 @@ button {
 .hidden {
     display: none;
 }
-.color-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.5em;
-}
-.color-item input[type="text"] {
-    flex: 1;
-}
 
 .container {
     display: flex;
@@ -63,13 +54,13 @@ button {
     margin-right: 10px;
 }
 
-.torso-type-item {
+.item {
     display: flex;
     align-items: center;
     margin-bottom: 0.5em;
 }
 
-.torso-type-item input[type="text"] {
+.item input[type="text"] {
     flex: 1;
     margin-right: 10px;
 }

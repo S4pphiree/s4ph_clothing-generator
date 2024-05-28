@@ -3,8 +3,12 @@ var colorCounter = 0;
 
 function toggleForm() {
     const select = document.getElementById('itemSelect');
+
     const handsForm = document.getElementById('handsForm');
+    const accessoriesForm = document.getElementById('accessoriesForm');
+    
     handsForm.classList.toggle('hidden', select.value !== 'hands');
+    accessoriesForm.classList.toggle('hidden', select.value !== 'accessories');
     // Aggiungi eventuali altri form qui
 }
 
@@ -27,54 +31,31 @@ function copyJSON() {
     //alert('JSON copiato negli appunti!');
 }
 
-function updateColorOrder() {
-    const colorItems = document.querySelectorAll('.color-item');
-    colorItems.forEach((item, index) => {
-        const colorInput = item.querySelector('input[type="text"]');
-        colorInput.name = `color_${index}`;
-        const colorLabel = item.querySelector('label');
-        colorLabel.textContent = `Colore ${index + 1}:`;
-    });
-}
-
 function generateJSON() {
-    const gender = document.getElementById('gender').value;
     const item = document.getElementById('itemSelect').value;
     const label = document.getElementById('itemLabel').value;
 
-    const colorItems = document.querySelectorAll('.color-item input[type="text"]');
-    let colours = {};
-    colorItems.forEach((colorInput, index) => {
-        if (colorInput.value.trim() !== '') {
-            colours[`[${index}]`] = "'" + colorInput.value.trim() + "'";
-        }
-    });
-
-    const torsoTypeItems = document.querySelectorAll('.torso-type-item select');
-    let torsoTypes = {};
-    torsoTypeItems.forEach((torsoTypeSelect) => {
-        if (torsoTypeSelect.value.trim() !== '') {
-            const torsoType = torsoTypeSelect.value.trim();
-            const torsoNumberInput = torsoTypeSelect.nextElementSibling; // Ottieni l'input del numero del modello
-            const torsoTypeModel = parseInt(torsoNumberInput.value); // Converti il valore in un numero intero
-            torsoTypes[`['${torsoType}']`] = {
-                model: torsoTypeModel
-            };
-        }
-    });
-
     let jsonOutput = {};
-    jsonOutput['[\'' + generateName().toLowerCase().replace(/ /g, '') + '\']'] = {
+    let outputName = '[\'' + generateName().toLowerCase().replace(/ /g, '') + '\']'
+    
+    jsonOutput[outputName] = {
         label: label,
-        colours: colours,
-        torsoTypes: torsoTypes
+        colours: GetNumberedObject('colours'),
     };
+
+    switch(item) {
+        case 'hands': {
+            jsonOutput[outputName].torsoTypes = GetSelectBoxObject('torsoTypes');
+        }
+        case 'accessories': {
+            jsonOutput[outputName].accessoryTypes = GetSelectBoxObject('accessoryTypes');
+        }
+    }
 
     var jsonResult = JSON.stringify(jsonOutput, null, 4);
     jsonResult = jsonResult.replace(/:/g, " =")
     document.getElementById('jsonOutput').innerText = jsonResult.replace(/"/g, ""); // Rimuovi i doppi apici
     document.getElementById('copyButton').style.backgroundColor = '#007bff';
-
 }
 
 function generateName() {
@@ -89,95 +70,106 @@ function generateName() {
     return generatedName + label;
 }
 
-function addTorsoType() {
-    const torsoTypesContainer = document.getElementById('torsoTypesContainer');
+function GetNumberedObject(name) {
+    const arrayItems = document.querySelectorAll('#' + name + '-item input[type="text"]');
+    let items = {};
+    arrayItems.forEach((numberInput, index) => {
+        if (numberInput.value.trim() !== '') {
+            items[`[${index}]`] = "'" + numberInput.value.trim() + "'";
+        }
+    });
 
-    const torsoTypeItem = document.createElement('div');
-    torsoTypeItem.classList.add('torso-type-item');
+    return items;
+}
 
-    //const torsoTypeLabel = document.createElement('label');
-    //torsoTypeLabel.textContent = 'Torsotype:';
+function GetSelectBoxObject(name) {
+    const selectBoxItems = document.querySelectorAll('#' + name + '-item select');
+    let selectBox = {};
+    
+    selectBoxItems.forEach((select) => {
+        if (select.value.trim() !== '') {
+            const selectItem = select.value.trim();
+            const selectNumberInput = select.nextElementSibling; // Ottieni l'input del numero del modello
+            const selectModel = parseInt(selectNumberInput.value); // Converti il valore in un numero intero
+            
+            selectBox[`['${selectItem}']`] = {
+                model: selectModel
+            };
+        }
+    });
 
-    const torsoTypeSelect = document.createElement('select');
-    torsoTypeSelect.name = 'torsoTypes';
+    return selectBox;
+}
 
-    const torsoTypeOptions = {
-        'Mezze Braccia': 'halfarms',
-        'Mani e Mezzo Collo': 'handsonlyhalfneck',
-        'Braccia Complete': 'fullarms',
-        'Nessuno': 'none',
-        'Solo Mani': 'handsonly',
-        'Braccia Complete fino al Torso': 'fullarmstoptorso',
-        'Solo Mani e Collo Inter': 'handsonlyfullneck',
-        'Avambracci': 'forearms',
-        'Avambracci e Collo': 'forearmsbitneck',
-        'Mani e Collo': 'handsbitneck',
-        'Torso e Mani': 'torsohandsonly',
-        'Corpo Intero': 'fullbody'
-    };
+function CreateSelectBoxObject(container, name, options) {
+    const selectBoxContainer = document.getElementById(container);
 
-    Object.entries(torsoTypeOptions).forEach(([label, value]) => {
+    const selectBoxItem = document.createElement('div');
+    selectBoxItem.classList.add('item');
+    selectBoxItem.setAttribute('id', name +'-item');
+
+    const selectBoxSelect = document.createElement('select');
+    selectBoxSelect.name = name;
+
+    const selectBoxOptions = options
+
+    Object.entries(selectBoxOptions).forEach(([label, value]) => {
         const optionElement = document.createElement('option');
         optionElement.value = value;
         optionElement.textContent = label + ' - ' + value;
-        torsoTypeSelect.appendChild(optionElement);
+        selectBoxSelect.appendChild(optionElement);
     });
 
-    const torsoNumberInput = document.createElement('input');
-    torsoNumberInput.type = 'number';
-    torsoNumberInput.value = 0;
-    torsoNumberInput.style.width = '60px';
+    const selectBoxInput = document.createElement('input');
+    selectBoxInput.type = 'number';
+    selectBoxInput.value = 0;
+    selectBoxInput.style.width = '60px';
 
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.textContent = '❌';
     removeBtn.classList.add('remove-item-btn');
     removeBtn.onclick = function() {
-        torsoTypesContainer.removeChild(torsoTypeItem);
+        selectBoxContainer.removeChild(selectBoxItem);
     };
 
-    //torsoTypeItem.appendChild(torsoTypeLabel);
-    torsoTypeItem.appendChild(torsoTypeSelect);
-    //torsoTypeItem.appendChild(document.createTextNode(' Numero: '));
-    torsoTypeItem.appendChild(torsoNumberInput);
-    torsoTypeItem.appendChild(removeBtn);
-    torsoTypesContainer.appendChild(torsoTypeItem);
+    selectBoxItem.appendChild(selectBoxSelect);
+    selectBoxItem.appendChild(selectBoxInput);
+    selectBoxItem.appendChild(removeBtn);
+    selectBoxContainer.appendChild(selectBoxItem);
 }
 
-function addColor() {
-    const colorVariantsContainer = document.getElementById('colorVariantsContainer');
+function CreateNumberedObject(container, name) {
+    const variantsContainer = document.getElementById(container);
 
-    const colorItem = document.createElement('div');
-    colorItem.classList.add('color-item');
+    const variantItem = document.createElement('div');
+    variantItem.classList.add('item');
+    variantItem.setAttribute('id', 'colours-item');
 
     //const colorLabel = document.createElement('label');
     //colorLabel.textContent = 'Colore:';
 
-    const colorInput = document.createElement('input');
-    colorInput.type = 'text';
-    colorInput.placeholder = 'Inserisci il colore...';
-    colorInput.required = true;
+    const numberInput = document.createElement('input');
+    numberInput.type = 'text';
+    numberInput.placeholder = 'Inserisci ' + name;
+    numberInput.required = true;
 
-    const colorNumberInput = document.createElement('input');
-    colorNumberInput.type = 'number';
-    colorNumberInput.min = 0;
-    colorNumberInput.value = colorCounter;
-    colorNumberInput.style.width = '60px';
+    const variantNumberInput = document.createElement('input');
+    variantNumberInput.type = 'number';
+    variantNumberInput.min = 0;
+    variantNumberInput.value = 0;
+    variantNumberInput.style.width = '60px';
 
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.textContent = '❌';
     removeBtn.classList.add('remove-item-btn');
     removeBtn.onclick = function() {
-        colorVariantsContainer.removeChild(colorItem);
+        variantsContainer.removeChild(variantItem);
     };
 
-    //colorItem.appendChild(colorLabel);
-    colorItem.appendChild(colorInput);
-    //colorItem.appendChild(document.createTextNode(' Numero: '));
-    colorItem.appendChild(colorNumberInput);
-    colorItem.appendChild(removeBtn);
-    colorVariantsContainer.appendChild(colorItem);
-
-    colorCounter++;
+    variantItem.appendChild(numberInput);
+    variantItem.appendChild(variantNumberInput);
+    variantItem.appendChild(removeBtn);
+    variantsContainer.appendChild(variantItem);
 }

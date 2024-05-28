@@ -34,11 +34,11 @@
         <div id="colorVariantsContainer">
             <!-- I colori selezionati verranno mostrati qui -->
         </div>
-        <button type="button" onclick="addColor()">Aggiungi Colore</button>
+        <button type="button" onclick="CreateNumberedObject('colorVariantsContainer', 'colours')">Aggiungi Colore</button>
     </div>
 
     <div id="itemsContainer">
-        <label for="itemSelect">Seleziona un oggetto:</label>
+        <label for="itemSelect">Seleziona tipo di oggetto:</label>
         <select id="itemSelect" name="itemSelect" onchange="toggleForm()">
             <option value="hats">Cappelli</option>
             <option value="glasses">Occhiali</option>
@@ -57,12 +57,46 @@
     </div>
 
     <div id = "formsContainer">
+        <div id="standardForm">
+        </div>
+        
         <div id="handsForm" class="hidden">
             <label for="torsoTypesContainer">Tipi di Torso</label>
             <div id="torsoTypesContainer">
                 <!-- I torsotypes selezionati verranno mostrati qui -->
             </div>
-            <button type="button" onclick="addTorsoType()">Aggiungi Petto</button>
+            <script>
+                const torsoTypeOptions = {
+                    'Mezze Braccia': 'halfarms',
+                    'Mani e Mezzo Collo': 'handsonlyhalfneck',
+                    'Braccia Complete': 'fullarms',
+                    'Nessuno': 'none',
+                    'Solo Mani': 'handsonly',
+                    'Braccia Complete fino al Torso': 'fullarmstoptorso',
+                    'Solo Mani e Collo Inter': 'handsonlyfullneck',
+                    'Avambracci': 'forearms',
+                    'Avambracci e Collo': 'forearmsbitneck',
+                    'Mani e Collo': 'handsbitneck',
+                    'Torso e Mani': 'torsohandsonly',
+                    'Corpo Intero': 'fullbody'
+                };
+            </script>
+            <button type="button" onclick="CreateSelectBoxObject('torsoTypesContainer', 'torsoTypes', torsoTypeOptions )">Aggiungi Petto</button>
+        </div>
+
+        <div id="accessoriesForm" class="hidden">
+            <label for="lengthsContainer">Lunghezze Accessorio</label>
+            <div id="lengthsContainer">
+                <!-- I torsotypes selezionati verranno mostrati qui -->
+            </div>
+            <script>
+                const lengthsOptions = {
+                    'Lunghezza 1': 'length1',
+                    'Lunghezza 2': 'length2',
+                    'Lunghezza 3': 'length3'
+                };
+            </script>
+            <button type="button" onclick="CreateSelectBoxObject('lengthsContainer', 'accessoryTypes', lengthsOptions)">Aggiungi Lunghezza</button>
         </div>
     </div>
 
