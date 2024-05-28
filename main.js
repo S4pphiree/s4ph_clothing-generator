@@ -10,8 +10,6 @@ function toggleForm() {
     handsForm.classList.toggle('hidden', select.value !== 'hands');
     accessoriesForm.classList.toggle('hidden', select.value !== 'accessories');
     topsForm.classList.toggle('hidden', select.value !== 'tops');
-
-    // Aggiungi eventuali altri form qui
 }
 
 function toggleVariant() {
@@ -20,27 +18,28 @@ function toggleVariant() {
     const variantContainer = document.getElementById('variantContainer');
     
     variantContainer.classList.toggle('hidden', select.value !== 'true');
-
-    // Aggiungi eventuali altri form qui
 }
 
 function copyJSON() {
-    // Seleziona il contenuto del div jsonOutput
     const jsonOutput = document.getElementById('jsonOutput');
     const range = document.createRange();
+    
     range.selectNode(jsonOutput);
-    window.getSelection().removeAllRanges(); // Pulisce la selezione precedente
+    window.getSelection().removeAllRanges();
     window.getSelection().addRange(range);
-
-    // Copia il testo selezionato negli appunti
     document.execCommand('copy');
 
-    // Deseleziona il testo
     window.getSelection().removeAllRanges();
 
-    // Visualizza un messaggio di conferma
+    document.getElementById('copyButton').textContent = "JSON Copiato!";7
     document.getElementById('copyButton').style.backgroundColor = 'green';
-    //alert('JSON copiato negli appunti!');
+
+    setTimeout(() => {
+        document.getElementById('copyButton').textContent = "Copia JSON";
+        document.getElementById('copyButton').style.backgroundColor = '#007bff';
+
+    }, 2000);
+        
 }
 
 function generateJSON() {
@@ -149,111 +148,88 @@ function GetSelectBoxObject(name, childName) {
     return selectBox;
 }
 
-function CreateSelectBoxObject(container, name, options) {
-    const selectBoxContainer = document.getElementById(container);
+function CreateObjectArray(container, name, type, options) {
+    const objectContainer = document.getElementById(container);
 
-    const selectBoxItem = document.createElement('div');
-    selectBoxItem.classList.add('item');
-    selectBoxItem.setAttribute('id', name +'-item');
+    const objectArrayItem = document.createElement('div');
+    objectArrayItem.classList.add('item');
+    objectArrayItem.setAttribute('id', `${name}-item`);
 
-    const selectBoxSelect = document.createElement('select');
-    selectBoxSelect.name = name;
+    switch (type) {
+        case('select'): {
+            const objectArraySelect = document.createElement('select');
+            objectArraySelect.name = name;
 
-    const selectBoxOptions = options
+            const objectArraySelectOptions = options;
 
-    Object.entries(selectBoxOptions).forEach(([label, value]) => {
-        const optionElement = document.createElement('option');
-        optionElement.value = value;
-        optionElement.textContent = label + ' - ' + value;
-        selectBoxSelect.appendChild(optionElement);
-    });
+            Object.entries(objectArraySelectOptions).forEach(([label, value]) => {
+                const optionElement = document.createElement('option');
+                optionElement.value = value;
+                optionElement.textContent = `${label}-${value}`;
+                objectArraySelect.appendChild(optionElement);
+            });
 
-    const selectBoxInput = document.createElement('input');
-    selectBoxInput.type = 'number';
-    selectBoxInput.value = 0;
-    selectBoxInput.title = `ID Modello`;
-    selectBoxInput.style.width = '60px';
+            const objectArrayInput = document.createElement('input');
+            objectArrayInput.type = 'number';
+            objectArrayInput.value = 0;
+            objectArrayInput.title = `ID ${name}`;
+            objectArrayInput.style.width = '60px';
 
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.textContent = '×';
-    removeBtn.classList.add('remove-item-btn');
-    removeBtn.onclick = function() {
-        selectBoxContainer.removeChild(selectBoxItem);
-    };
+            objectArrayItem.appendChild(objectArraySelect);
+            objectArrayItem.appendChild(objectArrayInput);
+            
+            break;
+        }     
+        case('number'): {
+            const objectArrayInput = document.createElement('input');
+            objectArrayInput.type = 'text';
+            objectArrayInput.placeholder = `Inserisci ${name}`;
+            objectArrayInput.title = `Nome ${name}`;
+            objectArrayInput.required = true;
 
-    selectBoxItem.appendChild(selectBoxSelect);
-    selectBoxItem.appendChild(selectBoxInput);
-    selectBoxItem.appendChild(removeBtn);
-    selectBoxContainer.appendChild(selectBoxItem);
-}
+            const objectArrayChildInput = document.createElement('input');
+            objectArrayChildInput.type = 'number';
+            objectArrayChildInput.min = 0;
+            objectArrayChildInput.value = 0;
+            objectArrayChildInput.title = "ID Child"
+            objectArrayChildInput.style.width = '60px';
 
-function CreateNumberedObject(container, name) {
-    const variantsContainer = document.getElementById(container);
+            objectArrayItem.appendChild(objectArrayInput);
+            objectArrayItem.appendChild(objectArrayChildInput);
 
-    const variantItem = document.createElement('div');
-    variantItem.classList.add('item');
-    variantItem.setAttribute('id', name +'-item');
+            break;
+        }
+        case('text'): {
+            const objectArrayInput = document.createElement('input');
+            objectArrayInput.type = 'text';
+            objectArrayInput.value = `${document.getElementById('gender').value}_${document.getElementById('itemSelect').value}_`;
+            objectArrayInput.title = `Nome Oggetto ${name}`;
+            objectArrayInput.required = true;
+        
+            const objectArrayChildInput = document.createElement('input');
+            objectArrayChildInput.type = 'number';
+            objectArrayChildInput.min = 0;
+            objectArrayChildInput.value = 0;
+            objectArrayChildInput.title = "ID Child"
+            objectArrayChildInput.style.width = '60px';
 
-    const numberInput = document.createElement('input');
-    numberInput.type = 'text';
-    numberInput.placeholder = 'Inserisci ' + name;
-    numberInput.title = `ID ${name}`;
-    numberInput.required = true;
+            objectArrayItem.appendChild(objectArrayInput);
+            objectArrayItem.appendChild(objectArrayChildInput);
 
-    const variantNumberInput = document.createElement('input');
-    variantNumberInput.type = 'number';
-    variantNumberInput.min = 0;
-    variantNumberInput.value = 0;
-    variantNumberInput.style.width = '60px';
-
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.textContent = '×';
-    removeBtn.classList.add('remove-item-btn');
-    removeBtn.onclick = function() {
-        variantsContainer.removeChild(variantItem);
-    };
-
-    variantItem.appendChild(numberInput);
-    variantItem.appendChild(variantNumberInput);
-    variantItem.appendChild(removeBtn);
-    variantsContainer.appendChild(variantItem);
-}
-
-function CreateTextBoxObject(container, name) {
-    const variantsContainer = document.getElementById(container);
-
-    const variantItem = document.createElement('div');
-    variantItem.classList.add('item');
-    variantItem.setAttribute('id', name +'-item');
-
-    const textInput = document.createElement('input');
-    textInput.type = 'text';
-    textInput.value = `${document.getElementById('gender').value}_${document.getElementById('itemSelect').value}_`;
-    textInput.title = "Nome Item";
-    textInput.required = true;
-
-    const childInput = document.createElement('input');
-    childInput.type = 'number';
-    childInput.min = 0;
-    childInput.value = 0;
-    childInput.title = "ID Tipo di Torso"
-    childInput.style.width = '60px';
-
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.textContent = '×';
-    removeBtn.classList.add('remove-item-btn');
-    removeBtn.onclick = function() {
-        variantsContainer.removeChild(variantItem);
-    };
-
+            break;
+        }
+    }
     
-    variantItem.appendChild(textInput);
-    variantItem.appendChild(childInput);
-    variantItem.appendChild(removeBtn);
-    variantsContainer.appendChild(variantItem);
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.textContent = '×';
+    removeBtn.classList.add('remove-item-btn');
+    removeBtn.onclick = function() {
+        objectContainer.removeChild(objectArrayItem);
+    };
+
+    objectArrayItem.appendChild(removeBtn);
+    objectContainer.appendChild(objectArrayItem);
 }
 
 function ClearForm() {
@@ -265,4 +241,6 @@ function ClearForm() {
     
     toggleForm();
 }
+
+
 

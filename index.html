@@ -36,7 +36,7 @@
 
         <div id="colorContainer" class="container">
             <label for="colorVariantsContainer">Colori</label>
-            <button type="button" class="add-btn" onclick="CreateNumberedObject('colorVariantsContainer', 'colours')">+</button>
+            <button type="button" class="add-btn" onclick="CreateObjectArray('colorVariantsContainer', 'colours', 'number')">+</button>
             <div id="colorVariantsContainer"></div>
         </div>
 
@@ -65,7 +65,7 @@
             <div id="handsForm" class="hidden">
                 <div id="formContainer" class="container">
                     <label for="torsoTypesContainer">Tipi di Torso</label>
-                    <button type="button" class="add-btn" onclick="CreateSelectBoxObject('torsoTypesContainer', 'torsoTypes', torsoTypeOptions)">+</button>
+                    <button type="button" class="add-btn" onclick="CreateObjectArray('torsoTypesContainer', 'torsoTypes', 'select', torsoTypeOptions)">+</button>
                     <div id="torsoTypesContainer"></div>
                 </div>
                 <script>
@@ -89,7 +89,7 @@
             <div id="accessoriesForm" class="hidden">
                 <div id="formContainer" class="container">
                     <label for="lengthsContainer">Lunghezze Accessorio</label>
-                    <button type="button" class="add-btn" onclick="CreateSelectBoxObject('lengthsContainer', 'accessoryTypes', lengthsOptions)">+</button>
+                    <button type="button" class="add-btn" onclick="CreateObjectArray('lengthsContainer', 'accessoryTypes', 'select', lengthsOptions)">+</button>
                     <div id="lengthsContainer"></div>
                 </div>
                 <script>
@@ -104,7 +104,7 @@
             <div id="topsForm" class="hidden">
                 <div id="formContainer">
                     <label for="undershirtWhitelistContainer">Whitelist Undershirt</label>
-                    <button type="button" class="add-btn" onclick="CreateTextBoxObject('undershirtWhitelistContainer', 'undershirtWhitelist')">+</button>
+                    <button type="button" class="add-btn" onclick="CreateObjectArray('undershirtWhitelistContainer', 'undershirtWhitelist', 'text')">+</button>
                     <div id="undershirtWhitelistContainer"></div>
 
                     <label for="undershirtBoolSelect">Può essere un'undershirt?</label>
