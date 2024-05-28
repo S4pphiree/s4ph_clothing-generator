@@ -43,19 +43,19 @@
         <div id="itemsContainer" class="container">
             <label for="itemSelect">Tipo di Oggetto</label>
             <select id="itemSelect" name="itemSelect" onchange="toggleForm()">
-                <option value="hats">Cappelli</option>
-                <option value="glasses">Occhiali</option>
-                <option value="earrings">Orecchini</option>
-                <option value="watches">Orologi</option>
-                <option value="bracelets">Braccialetti</option>
-                <option value="masks">Maschere</option>
-                <option value="hands">Guanti</option>
-                <option value="accessories">Accessori</option>
-                <option value="tops">Parti Superiori</option>
-                <option value="pants">Pantaloni</option>
-                <option value="bags">Borse</option>
-                <option value="shoes">Scarpe</option>
-                <option value="armors">Giubbotti Antiproiettili</option>
+                <option value="hats">Cappelli - hats</option>
+                <option value="glasses">Occhiali - glasses</option>
+                <option value="earrings">Orecchini - earrings</option>
+                <option value="watches">Orologi - watches</option>
+                <option value="bracelets">Braccialetti - bracelets</option>
+                <option value="masks">Maschere - masks</option>
+                <option value="hands">Guanti - hands</option>
+                <option value="accessories">Accessori - accessories</option>
+                <option value="tops">Parti Superiori - tops</option>
+                <option value="pants">Pantaloni - pants</option>
+                <option value="bags">Borse - bags</option>
+                <option value="shoes">Scarpe - shoes</option>
+                <option value="armors">Giubbotti Antiproiettili - armors</option>
             </select>
         </div>
 
@@ -104,7 +104,7 @@
             <div id="topsForm" class="hidden">
                 <div id="formContainer">
                     <label for="undershirtWhitelistContainer">Whitelist Undershirt</label>
-                    <button type="button" class="add-btn" onclick="CreateObjectArray('undershirtWhitelistContainer', 'undershirtWhitelist', 'text')">+</button>
+                    <button type="button" class="add-btn" onclick="CreateObjectArray('undershirtWhitelistContainer', 'undershirtWhitelist', 'textSelect', torsoTypeOptions)">+</button>
                     <div id="undershirtWhitelistContainer"></div>
 
                     <label for="undershirtBoolSelect">Può essere un'undershirt?</label>
@@ -128,7 +128,7 @@
 
                     <div id="variantContainer" class="hidden">
                         <label for="variantModelText">ID Modello Variante</label>
-                        <input type="text" placeholder="ID Modello Variante" id="variantModelText" name="variantModelText">
+                        <input type="number" placeholder="ID Modello Variante" id="variantModelText" name="variantModelText" value="0">
                         
                         <label for="variantAccessoryLengthSelect">Lunghezza accettata degli accessori</label>
                         <select id="variantAccessoryLengthSelect" name="variantAccessoryLengthSelect">
@@ -137,6 +137,13 @@
                             <option value="length3">Lunghezza 3 - length3</option>
                         </select>
                     </div>
+                </div>
+            </div>
+
+            <div id="armorsForm" class="hidden">
+                <div id="formContainer" class="container">
+                    <label for="armorLevelText">Livello Armatura</label>
+                    <input type="number" placeholder="ID Modello Variante" id="armorLevelText" name="armorLevelText" value="0" min="0" max="4" step="1">
                 </div>
             </div>
         </div>

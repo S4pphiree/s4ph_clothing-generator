@@ -6,10 +6,12 @@ function toggleForm() {
     const handsForm = document.getElementById('handsForm');
     const accessoriesForm = document.getElementById('accessoriesForm');
     const topsForm = document.getElementById('topsForm');
+    const armorsForm = document.getElementById('armorsForm');
     
     handsForm.classList.toggle('hidden', select.value !== 'hands');
     accessoriesForm.classList.toggle('hidden', select.value !== 'accessories');
     topsForm.classList.toggle('hidden', select.value !== 'tops');
+    armorsForm.classList.toggle('hidden', select.value !== 'armors');
 }
 
 function toggleVariant() {
@@ -43,6 +45,8 @@ function copyJSON() {
 }
 
 function generateJSON() {
+    document.getElementById('jsonOutput').innerText = '';
+
     const item = document.getElementById('itemSelect').value;
     const model = document.getElementById('itemModel').value;
     const label = document.getElementById('itemLabel').value;
@@ -53,29 +57,42 @@ function generateJSON() {
     jsonOutput[outputName] = {
         label: label,
         model: model,
-        colours: GetNumberedObject('colours'),
+        colours: GetObjectInfo('number', 'colours'),
     };
 
     switch(item) {
         case 'hands': {
-            jsonOutput[outputName].torsoTypes = GetSelectBoxObject('torsoTypes', 'model');
+            jsonOutput[outputName].torsoTypes = GetObjectInfo('select', 'torsoTypes', 'model');
+            
             break;
         }
         case 'accessories': {
-            jsonOutput[outputName].accessoryTypes = GetSelectBoxObject('accessoryTypes', 'model');
+            jsonOutput[outputName].accessoryTypes = GetObjectInfo('select', 'accessoryTypes', 'model');
+            
             break;
         }
         case 'tops': {
             jsonOutput[outputName].canBeUndershirt = document.getElementById('undershirtBoolSelect').value;
-            jsonOutput[outputName].undershirtWhitelist = GetTextBoxObject('undershirtWhitelist', 'torsotype')
+            jsonOutput[outputName].undershirtWhitelist = GetObjectInfo('textSelect', 'undershirtWhitelist', 'torsotype')
 
             jsonOutput[outputName].accessoryLengthWhitelist = document.getElementById('accessoryLengthSelect').value;
             jsonOutput[outputName].hasVariant = document.getElementById('variantBoolSelect').value;
-            if (jsonOutput[outputName].hasVariant == true)
+            if (jsonOutput[outputName].hasVariant == 'true')
                 {
                     jsonOutput[outputName].variantModel = document.getElementById('variantModelText').value;
                     jsonOutput[outputName].variantAccessoryLengthWhitelist = document.getElementById('variantAccessoryLengthSelect').value;
                 }
+            
+                break;
+        }
+        case 'armors': {
+            jsonOutput[outputName].armorLevel = document.getElementById('armorLevelText').value;
+            
+            if (jsonOutput[outputName].armorLevel < 0)
+                jsonOutput[outputName].armorLevel = 0
+            else if (jsonOutput[outputName].armorLevel > 4)
+                jsonOutput[outputName].armorLevel = 4
+            
             break;
         }
     }
@@ -98,7 +115,7 @@ function generateName() {
     return generatedName + label;
 }
 
-function GetNumberedObject(name) {
+/*function GetNumberedObject(name) {
     const arrayItems = document.querySelectorAll('#' + name + '-item input[type="text"]');
     let items = {};
     arrayItems.forEach((numberInput, index) => {
@@ -146,6 +163,73 @@ function GetSelectBoxObject(name, childName) {
     });
 
     return selectBox;
+}*/
+
+function GetObjectInfo(type, name, childName) {
+    let array = {};
+
+    switch(type) {
+        case('select'): {
+            const arrayItems = document.querySelectorAll(`#${name}-item select`);
+            arrayItems.forEach((items) => {
+                if (items.value.trim() !== '') {
+                    const arrayItem = items.value.trim();
+                    const arrayItemNumberInput = items.nextElementSibling; // Ottieni l'input del numero del modello
+                    const arrayItemModelNumber = parseInt(arrayItemNumberInput.value); // Converti il valore in un numero intero
+                    
+                    array[`['${arrayItem}']`] = {
+                        [childName]: arrayItemModelNumber
+                    };
+                }
+            });
+            return array;
+        }
+        case('number'): {
+            const arrayItems = document.querySelectorAll(`#${name}-item input[type="text"]`);
+            arrayItems.forEach((items) => {
+                if (items.value.trim() !== '') {
+                    const arrayItem = items.value.trim();
+                    const arrayItemNumberInput = items.nextElementSibling; // Ottieni l'input del numero del modello
+                    const arrayItemModelNumber = parseInt(arrayItemNumberInput.value); // Converti il valore in un numero intero
+                    
+                    array[`[${arrayItemModelNumber}]`] = arrayItem
+                }
+            });
+            return array;
+        }
+        case('text'): {
+            const arrayItems = document.querySelectorAll(`#${name}-item input[type="text"]`);
+            arrayItems.forEach((items) => {
+                if (items.value.trim() !== '') {
+                    const arrayItem = items.value.trim();
+                    const arrayItemNumberInput = items.nextElementSibling; // Ottieni l'input del numero del modello
+                    const arrayItemModelNumber = parseInt(arrayItemNumberInput.value); // Converti il valore in un numero intero
+                    
+                    array[`['${arrayItem}']`] = {
+                        [childName]: arrayItemModelNumber
+                    };
+                }
+            });
+            return array;
+        }         
+        case('textSelect'): {
+            const arrayItems = document.querySelectorAll(`#${name}-item input[type="text"]`);
+            arrayItems.forEach((items, index) => {
+                if (items.value.trim() !== '') {
+                    const arrayItem = items.value.trim();
+                    const arrayItemNumberInput = items.nextElementSibling; // Ottieni l'input del numero del modello
+                    const arrayItemModelNumber = parseInt(arrayItemNumberInput.value); // Converti il valore in un numero intero
+
+                    const selectItems = document.querySelectorAll(`#${name}-item select`)
+                    
+                    array[`['${arrayItem}']`] = {
+                        [childName]: `'${selectItems[index].value.trim()}'`
+                    };
+                }
+            });
+            return array;
+        }    
+    }
 }
 
 function CreateObjectArray(container, name, type, options) {
@@ -165,7 +249,7 @@ function CreateObjectArray(container, name, type, options) {
             Object.entries(objectArraySelectOptions).forEach(([label, value]) => {
                 const optionElement = document.createElement('option');
                 optionElement.value = value;
-                optionElement.textContent = `${label}-${value}`;
+                optionElement.textContent = `${label} - ${value}`;
                 objectArraySelect.appendChild(optionElement);
             });
 
@@ -215,6 +299,33 @@ function CreateObjectArray(container, name, type, options) {
 
             objectArrayItem.appendChild(objectArrayInput);
             objectArrayItem.appendChild(objectArrayChildInput);
+
+            break;
+        }
+        case('textSelect'): {
+            const objectArrayInput = document.createElement('input');
+            objectArrayInput.type = 'text';
+            objectArrayInput.value = `${document.getElementById('gender').value}_${document.getElementById('itemSelect').value}_`;
+            objectArrayInput.title = `Nome Oggetto ${name}`;
+            objectArrayInput.required = true;
+            objectArrayInput.style.width = '300px';
+
+            const objectArrayChildSelect = document.createElement('select');
+            objectArrayChildSelect.name = name;
+            objectArrayChildSelect.title = `Tipo ${name}`;
+            objectArrayChildSelect.style.width = '300px';
+
+            const objectArraySelectOptions = options;
+
+            Object.entries(objectArraySelectOptions).forEach(([label, value]) => {
+                const optionElement = document.createElement('option');
+                optionElement.value = value;
+                optionElement.textContent = `${label} - ${value}`;
+                objectArrayChildSelect.appendChild(optionElement);
+            });
+
+            objectArrayItem.appendChild(objectArrayInput);
+            objectArrayItem.appendChild(objectArrayChildSelect);
 
             break;
         }
