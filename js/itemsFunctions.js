@@ -16,41 +16,62 @@ function GetObjectInfo(type, name, childName) {
     const array = {};
 
     const getItemValue = (item) => item.value.trim();
+    const getItemTitle = (item) => item.title.trim();
 
     const arrayItems = document.querySelectorAll(`#${name}-item`);
 
     arrayItems.forEach((item) => {
         const inputText = item.querySelector('input[type="text"]');
         if (inputText)
-            var inputValue = getItemValue(inputText);
+            {
+                var inputTitle = getItemTitle(inputText);
+                var inputValue = getItemValue(inputText);
+            }
+            
 
         const inputNumber = item.querySelector('input[type="number"]');
         if (inputNumber)
             var inputNumberParsedValue = parseInt(inputNumber.value);
 
-        if (inputValue !== '') {
+        if (inputValue !== '' && inputNumberParsedValue !== undefined) {
             let key;
             let value;
 
             switch (type) {
                 case 'select':
                     var selectValue = item.querySelector('select').value.trim();
-                    key = `['${selectValue}']`;
-                    value = { [childName]: inputNumberParsedValue };
+                    key = `[${inputNumberParsedValue}]`;
+                    value = { [childName]: { inputValue, inputSecondValue: selectValue } };
                     break;
                 case 'text':
-                    key = `['${inputValue}']`;
-                    value = { [childName]: inputNumberParsedValue };
+                    key = `[${inputNumberParsedValue}]`;
+                    value = { [childName]: { inputValue, inputSecondValue: inputNumberParsedValue } };
                     break;
                 case 'number':
                     key = `[${inputNumberParsedValue}]`;
-                    value = `'${inputValue}'`;
+                    value = { [childName]: { inputValue: `'${inputValue}'`, inputSecondValue: inputNumberParsedValue } };
                     break;
                 case 'textSelect':
                     var selectValue = item.querySelector('select').value.trim();
-                    key = `['${inputValue}']`;
-                    value = { [childName]: `'${selectValue}'` };
+                    key = `[${inputNumberParsedValue}]`;
+                    value = { [childName]: { inputValue: `'${inputValue}'`, inputSecondValue: `'${selectValue}'` } };
                     break;
+                case 'doublenumber':
+                    const inputTextSecond = item.querySelector('input[type="text"]:nth-child(2)');
+                    if (inputTextSecond)
+                        {
+                            var inputSecondTitle = getItemTitle(inputTextSecond);
+                            var inputSecondValue = getItemValue(inputTextSecond);
+                            if (inputSecondValue == '')
+                                inputSecondValue = 'Generico'
+                        }
+
+                    key = `[${inputNumberParsedValue}]`;
+                    value = { [inputTitle]: `'${inputValue}'`, [inputSecondTitle]: `'${inputSecondValue}'` };
+                    break;
+                default:
+                    console.error(`Unsupported type: ${type}`);
+                    return;
             }
 
             array[key] = value;
@@ -60,7 +81,9 @@ function GetObjectInfo(type, name, childName) {
     return array;
 }
 
-function CreateObjectArray(container, name, type, options) {
+
+
+function CreateObjectArray(container, name, type, options, secondName) {
     const objectContainer = document.getElementById(container);
     const objectArrayItem = document.createElement('div');
     objectArrayItem.classList.add('item');
@@ -84,6 +107,14 @@ function CreateObjectArray(container, name, type, options) {
             createTextInput(objectArrayItem, name, true, true, presetValue);
             createSelectElement(objectArrayItem, name, options);
             break;
+        case 'doublenumber':
+            createTextInput(objectArrayItem, name, true);
+            createTextInput(objectArrayItem, secondName, true); // Aggiunta del secondo input di testo
+            createNumberInput(objectArrayItem, name);
+            break;
+        default:
+            console.error(`Unsupported type: ${type}`);
+            return;
     }
     
     const removeBtn = document.createElement('button');
@@ -97,6 +128,7 @@ function CreateObjectArray(container, name, type, options) {
     objectArrayItem.appendChild(removeBtn);
     objectContainer.appendChild(objectArrayItem);
 }
+
 
 function createSelectElement(parent, name, options) {
     const objectArraySelect = document.createElement('select');
@@ -116,7 +148,7 @@ function createTextInput(parent, name, required = false, wide = false, presetVal
     const objectArrayInput = document.createElement('input');
     objectArrayInput.type = 'text';
     objectArrayInput.placeholder = `Inserisci ${name}`;
-    objectArrayInput.title = `Nome ${name}`;
+    objectArrayInput.title = `${name}`;
     objectArrayInput.value = presetValue;
     if (required) {
         objectArrayInput.required = true;
@@ -132,7 +164,7 @@ function createNumberInput(parent, name) {
     objectArrayChildInput.type = 'number';
     objectArrayChildInput.min = 0;
     objectArrayChildInput.value = 0;
-    objectArrayChildInput.title = "ID Child"
+    objectArrayChildInput.title = `ID ${name}`;
     objectArrayChildInput.style.width = '60px';
     parent.appendChild(objectArrayChildInput);
 }

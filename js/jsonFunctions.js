@@ -32,7 +32,7 @@ function generateJSON() {
     jsonOutput[outputName] = {
         label: label,
         model: model,
-        colours: GetObjectInfo('number', 'colours'),
+        colours: GetObjectInfo('doublenumber', 'colour'),
     };
 
     switch(item) {
