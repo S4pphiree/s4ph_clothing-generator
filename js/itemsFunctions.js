@@ -33,15 +33,15 @@ function GetObjectInfo(type, name, childName) {
         if (inputNumber)
             var inputNumberParsedValue = parseInt(inputNumber.value);
 
-        if (inputValue !== '' && inputNumberParsedValue !== undefined) {
+        if (inputValue !== '' || inputNumberParsedValue !== undefined) {
             let key;
             let value;
 
             switch (type) {
                 case 'select':
                     var selectValue = item.querySelector('select').value.trim();
-                    key = `[${inputNumberParsedValue}]`;
-                    value = { [childName]: { inputValue, inputSecondValue: selectValue } };
+                    key = `['${selectValue}']`;
+                    value = { [childName]: inputNumberParsedValue };
                     break;
                 case 'text':
                     key = `[${inputNumberParsedValue}]`;
@@ -53,8 +53,9 @@ function GetObjectInfo(type, name, childName) {
                     break;
                 case 'textSelect':
                     var selectValue = item.querySelector('select').value.trim();
-                    key = `[${inputNumberParsedValue}]`;
-                    value = { [childName]: { inputValue: `'${inputValue}'`, inputSecondValue: `'${selectValue}'` } };
+                    key = `['${inputValue}']`;
+                    value = { [childName]: selectValue };
+                    
                     break;
                 case 'doublenumber':
                     const inputTextSecond = item.querySelector('input[type="text"]:nth-child(2)');

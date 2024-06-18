@@ -30,7 +30,7 @@ function generateJSON() {
     let outputName = `['${generateName().toLowerCase().replace(/ /g, '')}']`;
 
     jsonOutput[outputName] = {
-        label: label,
+        label: `'${label}'`,
         model: model,
         colours: GetObjectInfo('doublenumber', 'colour'),
     };
@@ -62,12 +62,12 @@ function generateJSON() {
 function handleTops(output) {
     output.canBeUndershirt = document.getElementById('undershirtBoolSelect').value;
     output.undershirtWhitelist = GetObjectInfo('textSelect', 'undershirtWhitelist', 'torsotype');
-    output.accessoryLengthWhitelist = document.getElementById('accessoryLengthSelect').value;
+    output.accessoryLengthWhitelist = `'${document.getElementById('accessoryLengthSelect').value}'`;
     output.hasVariant = document.getElementById('variantBoolSelect').value;
     
     if (output.hasVariant === 'true') {
         output.variantModel = document.getElementById('variantModelText').value;
-        output.variantAccessoryLengthWhitelist = document.getElementById('variantAccessoryLengthSelect').value;
+        output.variantAccessoryLengthWhitelist = `'${document.getElementById('variantAccessoryLengthSelect').value}'`;
     }
 
     return output;
